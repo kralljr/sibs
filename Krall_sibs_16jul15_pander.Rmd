@@ -1,0 +1,93 @@
+---
+title: "Formatting tables using pander"
+author: "Jenna Krall"
+date: "July 16, 2015"
+output: 
+  html_document:
+    toc: true
+    theme: journal
+---
+
+
+```{r knitr_options, echo = F, message = F, warning = F}
+# Load packages
+library(knitr)
+library(dplyr)
+library(pander)
+library(htmlTable)
+library(ggplot2)
+library(ReporteRs)
+
+# Set global options for echo, eval
+opts_chunk$set(echo = F, eval = T, message = F, warning = F, fig.align = "center",  tidy = F)
+```
+
+# Highlighting using pander
+
+## Bold rows
+
+```{r, results="pandoc"}
+
+# Load and organize data
+load("shiny_fitbit/krall_fitbit.RData")
+fitbit_tab <- tail(daily)
+
+
+# Create sequence of even rows
+seqs1 <- seq(2, nrow(fitbit_tab), by = 2)
+
+# Add bold to rows
+emphasize.strong.rows(seqs1)
+# Show table
+pander(fitbit_tab)
+
+```
+
+## Bold cells
+
+```{r}
+
+# Find dates with fewer than 10,000 steps
+wh1 <- which(fitbit_tab < 10000, arr.ind = T)
+
+
+# Add bold
+emphasize.strong.cells(wh1)
+pander(fitbit_tab)
+```
+
+## Italicize cells
+
+
+```{r}
+# Add italicized
+emphasize.cells(wh1)
+pander(fitbit_tab)
+
+```
+
+
+# Better formatting for R output
+
+## Printing glm output
+
+```{r, echo = T}
+# Run standard linear model
+glm1 <- lm(Ozone ~ Temp, data = airquality)
+print(glm1)
+```
+
+## Pander glm output
+
+```{r}
+# Nice markdown output
+pander(glm1)
+```
+
+
+## Summary of glm output
+```{r}
+pander(summary(glm1))
+```
+
+
